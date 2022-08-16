@@ -1,12 +1,12 @@
 #include <SoftwareSerial.h>
 
 // H bridge pins
-int IN1 = 2;
-int IN2 = 4;
-int IN3 = 5;
-int IN4 = 7;
-int ENA = 3;
-int ENB = 6;
+int IN1 = 2; // brown
+int IN2 = 4; // red
+int IN3 = 5; // green
+int IN4 = 7; // yellow
+int ENA = 3; // purple
+int ENB = 6; // blue
 
 // Reflectance Sensors pins
 int sensor_left = 10;
