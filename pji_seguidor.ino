@@ -1,29 +1,25 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial bluetooth(0, 1); // RX, TX Arduino
-char bl = ' ';
-
 // H bridge pins
-int IN1 = 5;
-int IN2 = 6;
-int IN3 = 7;
-int IN4 = 8;
-int ENA = 9;
-int ENB = 10;
+int IN1 = 2;
+int IN2 = 4;
+int IN3 = 5;
+int IN4 = 7;
+int ENA = 3;
+int ENB = 6;
 
 // Reflectance Sensors pins
-int sensor_left = 11;
-int sensor_center = 12;
-int sensor_right = 13;
+int sensor_left = 10;
+int sensor_center = 9;
+int sensor_right = 8;
 
-int left, center, right;
+int left_val, center_val, right_val;
 
-int vel = 100;
+int vel = 50;
 
 void setup()
 {
-  bluetooth.begin(9600);
-  Serial.begin(9600);
+  Serial.begin(9600); 
 
   // Defines H bridge pins
   pinMode(IN1, OUTPUT);
@@ -43,53 +39,39 @@ void setup()
 
 void loop()
 {
-
-  // Lê os dados do bluetooth
-  if (bluetooth.available() > 0)
-  {
-    bl = bluetooth.read();
-
-    // Changes the motors velocity
-    if (isDigit(bl) == true || bl == 'q')
-    {
-      if (bl == 'q')
-      {
-        vel = 10;
-      }
-      else
-      {
-        vel = bl - '0';
-      }
-      defineSpeed(vel);
-    }
-  }
-
   // Reads the sensors
-  left = digitalRead(sensor_left);
-  center = digitalRead(sensor_center);
-  right = digitalRead(sensor_right);
+  left_val = digitalRead(sensor_left);
+  center_val = digitalRead(sensor_center);
+  right_val = digitalRead(sensor_right);
+  Serial.print("left: ");
+  Serial.print(left_val);
+  Serial.print(" center: ");
+  Serial.print(center_val);
+  Serial.print(" right: ");
+  Serial.print(right_val);
+  Serial.print("\n");
 
-  if ((left == 0) && (center == 1) && (right == 0))
+  if ((left_val == 0) && (center_val == 1) && (right_val == 0))
   {
     forward();
   }
-  else if ((left == 1) && (center == 1) && (right == 0))
+  else if ((left_val == 1) && (center_val == 1) && (right_val == 0))
   {
     left();
   }
-  else if ((left == 1) && (center == 0) && (right == 0))
+  else if ((left_val == 1) && (center_val == 0) && (right_val == 0))
   {
     left();
   }
-  else if ((left == 0) && (center == 1) && (right == 1))
+  else if ((left_val == 0) && (center_val == 1) && (right_val == 1))
   {
     right();
   }
-  else if ((left == 0) && (center == 0) && (right == 1))
+  else if ((left_val == 0) && (center_val == 0) && (right_val == 1))
   {
     right();
   }
-  else if ((left == 1) && (center == 1) && (right == 1))
+  else if ((left_val == 1) && (center_val == 1) && (right_val == 1))
   {
     stop();
   }
@@ -133,11 +115,4 @@ void stop()
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
-}
-
-void defineSpeed(int vel)
-{
-  vel = map(vel, 0, 10, 0, 255);
-  analogWrite(ENA, vel);
-  analogWrite(ENB, vel);
 }
