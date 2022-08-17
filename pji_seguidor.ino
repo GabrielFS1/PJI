@@ -1,8 +1,8 @@
 #include <SoftwareSerial.h>
 
 // H bridge pins
-int IN1 = 2; // brown
 int IN2 = 4; // red
+int IN1 = 2; // brown
 int IN3 = 5; // green
 int IN4 = 7; // yellow
 int ENA = 3; // purple
@@ -15,7 +15,7 @@ int sensor_right = 8;
 
 int left_val, center_val, right_val;
 
-int vel = 50;
+int vel = 45;
 
 void setup()
 {
@@ -27,7 +27,7 @@ void setup()
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
   pinMode(ENA, OUTPUT);
-  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
   analogWrite(ENA, vel);
   analogWrite(ENB, vel);
 
@@ -35,10 +35,12 @@ void setup()
   pinMode(sensor_left, INPUT);
   pinMode(sensor_center, INPUT);
   pinMode(sensor_right, INPUT);
+
 }
 
 void loop()
 {
+
   // Reads the sensors
   left_val = digitalRead(sensor_left);
   center_val = digitalRead(sensor_center);
@@ -51,25 +53,29 @@ void loop()
   Serial.print(right_val);
   Serial.print("\n");
 
-  if ((left_val == 0) && (center_val == 1) && (right_val == 0))
+  if ((left_val == 0) && (center_val == 0) && (right_val == 0))
+  {
+    forward();
+  }
+  else if ((left_val == 0) && (center_val == 1) && (right_val == 0))
   {
     forward();
   }
   else if ((left_val == 1) && (center_val == 1) && (right_val == 0))
   {
-    left();
+    right();
   }
   else if ((left_val == 1) && (center_val == 0) && (right_val == 0))
   {
-    left();
+    right();
   }
   else if ((left_val == 0) && (center_val == 1) && (right_val == 1))
   {
-    right();
+    left();
   }
   else if ((left_val == 0) && (center_val == 0) && (right_val == 1))
   {
-    right();
+    left();
   }
   else if ((left_val == 1) && (center_val == 1) && (right_val == 1))
   {
