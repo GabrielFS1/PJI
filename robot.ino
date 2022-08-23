@@ -14,6 +14,7 @@ int IN4 = 7;
 int ENB = 6;
 
 int vel = 30;
+int vel_linha = 30;
 
 // Reflectance Sensors pins
 int sensor_left = 11;
@@ -57,7 +58,6 @@ void loop()
         bl = bluetooth.read();
     }
 
-    changesVel(bl);
 
     if (bl == 'x' || bl == 'X')
     {
@@ -66,6 +66,7 @@ void loop()
 
     if (mode == false)
     {
+        changesVel(bl);
         bluetoothControl(bl);
     }
     else
@@ -83,27 +84,27 @@ void follower()
 
     if ((left_val == 0) && (center_val == 1) && (right_val == 0))
     {
-        setVel(vel);
+        setVel(vel_linha);
         forward();
     }
     else if ((left_val == 1) && (center_val == 0) && (right_val == 0))
     {
-        setVel(1.5 * vel);
+        setVel(1.5 * vel_linha);
         right();
     }
     else if ((left_val == 1) && (center_val == 1) && (right_val == 0))
     {
-        setVel(1.5 * vel);
+        setVel(1.5 * vel_linha);
         right();
     }
     else if ((left_val == 0) && (center_val == 0) && (right_val == 1))
     {
-        setVel(1.5 * vel);
+        setVel(1.5 * vel_linha);
         left();
     }
     else if ((left_val == 0) && (center_val == 1) && (right_val == 1))
     {
-        setVel(1.5 * vel);
+        setVel(1.5 * vel_linha);
         left();
     }
 }
@@ -206,13 +207,13 @@ void changesVel(char letter)
         {
             vel = letter - '0';
         }
+        vel = map(vel, 0, 10, 0, 255);
         setVel(vel);
     }
 }
 
 void setVel(int velocity)
 {
-    vel = map(vel, 0, 10, 0, 255);
     analogWrite(ENA, velocity);
     analogWrite(ENB, velocity);
 }
