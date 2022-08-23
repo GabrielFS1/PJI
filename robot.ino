@@ -69,7 +69,7 @@ void loop()
         changesVel(bl);
         bluetoothControl(bl);
     }
-    else
+    else if (mode == true)
     {
         follower();
     }
