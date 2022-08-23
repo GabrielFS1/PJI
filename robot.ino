@@ -212,6 +212,7 @@ void changesVel(char letter)
 
 void setVel(int velocity)
 {
+    vel = map(vel, 0, 10, 0, 255);
     analogWrite(ENA, velocity);
     analogWrite(ENB, velocity);
 }
